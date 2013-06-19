@@ -1,4 +1,4 @@
-MyLMP
+MyLAMP
 =====
 
-My little media player
+My little (audio) media player
