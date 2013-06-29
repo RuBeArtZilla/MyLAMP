@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_core", "mylamp_core\mylamp_core.vcxproj", "{2834C212-061D-4D22-A286-C73281FF9D7F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_updater", "mylamp_updater\mylamp_updater.vcxproj", "{EC27971D-4956-4A23-9398-1E75225CB464}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Debug|Win32.Build.0 = Debug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Release|Win32.ActiveCfg = Release|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Release|Win32.Build.0 = Release|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.Debug|Win32.Build.0 = Debug|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.Release|Win32.ActiveCfg = Release|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
