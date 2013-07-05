@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef MYLAMP_HEADER_EXPORT
-#define MYLAMP_HEADER_API __declspec(dllexport) 
+#define MYLAMP_HEADER_API extern "C" __declspec(dllexport) 
 #else
-#define MYLAMP_HEADER_API __declspec(dllimport) 
+#define MYLAMP_HEADER_API extern "C" __declspec(dllimport) 
 #endif
 
 
@@ -18,13 +18,15 @@ namespace mylamp
 		UINT64			version;
 	};
 
-	class component
+	class Component
 	{
 	public:
-		virtual ~component(){};
+		virtual ~Component(){};
 		virtual COMPONENT_INFO GetInfo() = 0;
 		virtual UINT64 GetCoreMinVersion() = 0;
 	};
 	
-	MYLAMP_HEADER_API component* RegComponent(); 
+	MYLAMP_HEADER_API Component* RegComponent(); 
+	MYLAMP_HEADER_API void FreeComponent(); 
+
 }

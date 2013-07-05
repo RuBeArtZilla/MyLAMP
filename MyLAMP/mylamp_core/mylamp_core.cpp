@@ -18,11 +18,15 @@ typedef std::string tstring;
 
 typedef std::vector<tstring> StringVector;
 typedef std::vector<tstring>::iterator StringVectorIterator;
+typedef std::vector<mylamp::Component*> ComponentVector;
+typedef std::vector<mylamp::Component*>::iterator ComponentVectorIterator;
+
 
 // Global Variables:
 HINSTANCE			hInst;										// current instance
 TCHAR				szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR				szWindowClass[MAX_LOADSTRING];				// the main window class name
+ComponentVector		cvComponents;								// List of pointers to all registred components
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -33,6 +37,7 @@ INT_PTR CALLBACK	Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 bool				AddItemsToSettingsTree(HWND hWnd, StringVector svPath, StringVector svItems);
 void				TreeExpandAllNode(HWND hWnd);
+StringVector		GetComponentNames(tstring path);
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -215,6 +220,8 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	return (INT_PTR)FALSE;
 }
 
+typedef mylamp::Component* (*_RegComponent)();
+
 // Message handler for preferences box.
 INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -225,7 +232,33 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		{
 			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
 
-			// Test samples
+			// <TEST CODE>
+			
+			StringVector svComponentNames = GetComponentNames(TEXT("..\\debug\\*.dll"));
+
+			StringVectorIterator svIterator = svComponentNames.begin();
+
+			while (svIterator != svComponentNames.end())
+			{
+				HMODULE hMod = LoadLibrary(*svIterator);
+				if (hMod)
+				{
+					_RegComponent pRegComponent = (_RegComponent) GetProcAddress(hMod, "RegComponent"); 
+					if (pRegComponent)
+					{
+						mylamp::Component* pComponent = pRegComponent();
+						if (pComponent)
+						{
+							
+						}
+					}
+				}
+
+				svIterator++;
+			}
+
+			
+			//=============================================
 			StringVector items, paths;
 			items.push_back(L"New Item");
 			items.push_back(L"New Item2");
@@ -240,7 +273,7 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 			AddItemsToSettingsTree(hWndTV, paths, items);
 
 			TreeExpandAllNode(hWndTV);
-
+			// </TEST CODE>
 
 			return (INT_PTR)TRUE;
 		}
@@ -253,6 +286,23 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		break;
 	}
 	return (INT_PTR)FALSE;
+}
+
+StringVector GetComponentNames(tstring path)
+{
+	StringVector svResult;
+	WIN32_FIND_DATA FindFileData;
+	HANDLE hFile = FindFirstFile(path.c_str(), &FindFileData);
+	if (hFile != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			svResult.push_back(FindFileData.cFileName);
+		}
+		while ( FindNextFile(hFile, &FindFileData) );
+		FindClose(hFile);
+	}
+	return svResult;
 }
 
 void TreeExpandAllNode(HWND hWnd)

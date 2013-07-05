@@ -3,20 +3,23 @@
 
 #include "stdafx.h"
 
-class Updater: public mylamp::component
+mylamp::Component * pComponent;
+
+class Updater: public mylamp::Component
 {
 public:
-	~Updater(){};
-	mylamp::COMPONENT_INFO GetInfo()
-	{
-		mylamp::COMPONENT_INFO ciResult = {1, 0};
-		return ciResult;
-	};
-	UINT64 GetCoreMinVersion(){return 1;};
+	virtual ~Updater(){};
+	virtual mylamp::COMPONENT_INFO GetInfo(){mylamp::COMPONENT_INFO ciResult = {1, 0};return ciResult;};
+	virtual UINT64 GetCoreMinVersion(){return 1;};
 };
 
-MYLAMP_HEADER_API mylamp::component* RegComponent()
+MYLAMP_HEADER_API mylamp::Component* RegComponent()
 {
-	Updater U;
-	return &U;
+	pComponent = new Updater();
+	return pComponent;
+}; 
+
+MYLAMP_HEADER_API void FreeComponent()
+{
+	delete pComponent;
 }; 
