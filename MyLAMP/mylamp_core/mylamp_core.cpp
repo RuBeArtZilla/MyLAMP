@@ -230,17 +230,14 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	{	
 	case WM_INITDIALOG:
 		{
-			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
-
-			// <TEST CODE>
-			
+			// <TEST CODE>		
 			StringVector svComponentNames = GetComponentNames(TEXT("..\\debug\\*.dll"));
 
 			StringVectorIterator svIterator = svComponentNames.begin();
 
 			while (svIterator != svComponentNames.end())
 			{
-				HMODULE hMod = LoadLibrary(*svIterator);
+				HMODULE hMod = LoadLibrary(svIterator->c_str());
 				if (hMod)
 				{
 					_RegComponent pRegComponent = (_RegComponent) GetProcAddress(hMod, "RegComponent"); 
@@ -249,16 +246,17 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 						mylamp::Component* pComponent = pRegComponent();
 						if (pComponent)
 						{
-							
+							cvComponents.push_back(pComponent);
 						}
 					}
 				}
-
 				svIterator++;
 			}
 
 			
 			//=============================================
+			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
+
 			StringVector items, paths;
 			items.push_back(L"New Item");
 			items.push_back(L"New Item2");
@@ -277,6 +275,7 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 			return (INT_PTR)TRUE;
 		}
+
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
@@ -284,6 +283,58 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 			return (INT_PTR)TRUE;
 		}
 		break;
+
+	case WM_NOTIFY:
+		{
+			LPNMHDR pNMHDR = (LPNMHDR)lParam;
+
+			if ( pNMHDR->hwndFrom == GetDlgItem(hDlg, IDC_SET_TREE) )
+			{
+				if ( pNMHDR->code == TVN_SELCHANGED )
+				{
+					LPNMTREEVIEW pNMTV = (LPNMTREEVIEW) lParam;
+					TVITEM tvItem = pNMTV->itemNew;
+
+					HTREEITEM hCurrent = tvItem.hItem; //warning: check mask; 
+
+					do
+					{
+						tstring tzCurrentName;
+						TVITEMEX tviCurrent = {0};
+
+						tviCurrent.pszText = new TCHAR[MAXCHAR];
+						tviCurrent.cchTextMax = MAXCHAR;
+
+						if (TreeView_GetItem(pNMHDR->hwndFrom, &tviCurrent)) 
+							tzCurrentName = tstring(tviCurrent.pszText);
+						else
+							return false;
+
+						delete tviCurrent.pszText;
+					}
+					while (1);
+
+					break;
+				}
+
+				if ( pNMHDR->code == TVN_BEGINLABELEDIT )
+				{
+
+					//hEditTreeControl = TreeView_GetEditControl(_mainDialog->_bonesTree.Hwnd());
+					break;
+				}
+
+				if ( pNMHDR->code == TVN_ENDLABELEDIT )
+				{
+					char text[256]="";
+					//GetWindowText(hEditTreeControl, text, sizeof(text)); 
+					//_mainDialog->_bonesTree.SetTextForSelection(text);
+					//hEditTreeControl = 0;
+					break; 
+				}
+			}
+			break;
+		}
 	}
 	return (INT_PTR)FALSE;
 }

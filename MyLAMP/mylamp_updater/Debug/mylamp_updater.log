@@ -1,5 +1,5 @@
-﻿Build started 05.07.2013 18:29:40.
-     1>Project "E:\Users\ArtZilla\Documents\GitHub\MyLAMP\MyLAMP\mylamp_updater\mylamp_updater.vcxproj" on node 3 (build target(s)).
+﻿Build started 06.07.2013 17:26:31.
+     1>Project "C:\Users\ArtZilla\Documents\GitHub\MyLAMP\MyLAMP\mylamp_updater\mylamp_updater.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\mylamp_updater.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -15,8 +15,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\mylamp_updater.unsuccessfulbuild".
          Touching "Debug\mylamp_updater.lastbuildstate".
-     1>Done Building Project "E:\Users\ArtZilla\Documents\GitHub\MyLAMP\MyLAMP\mylamp_updater\mylamp_updater.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\ArtZilla\Documents\GitHub\MyLAMP\MyLAMP\mylamp_updater\mylamp_updater.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.05
+Time Elapsed 00:00:00.13

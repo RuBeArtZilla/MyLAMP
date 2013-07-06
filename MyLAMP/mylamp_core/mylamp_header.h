@@ -9,9 +9,6 @@
 
 namespace mylamp
 {
-
-#define TEST_FILLER		0
-
 	struct COMPONENT_INFO
 	{
 		UINT64			id;
