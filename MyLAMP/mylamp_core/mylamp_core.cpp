@@ -21,7 +21,6 @@ typedef std::vector<tstring>::iterator StringVectorIterator;
 typedef std::vector<mylamp::Component*> ComponentVector;
 typedef std::vector<mylamp::Component*>::iterator ComponentVectorIterator;
 
-
 // Global Variables:
 HINSTANCE			hInst;										// current instance
 TCHAR				szTitle[MAX_LOADSTRING];					// The title bar text
@@ -38,6 +37,7 @@ INT_PTR CALLBACK	Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 bool				AddItemsToSettingsTree(HWND hWnd, StringVector svPath, StringVector svItems);
 void				TreeExpandAllNode(HWND hWnd);
 StringVector		GetComponentNames(tstring path);
+bool				ChangeSelectedItem(StringVector svReverseItem);
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -287,6 +287,7 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	case WM_NOTIFY:
 		{
 			LPNMHDR pNMHDR = (LPNMHDR)lParam;
+			StringVector svCurrentItem;
 
 			if ( pNMHDR->hwndFrom == GetDlgItem(hDlg, IDC_SET_TREE) )
 			{
@@ -299,44 +300,37 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 					do
 					{
-						tstring tzCurrentName;
-						TVITEMEX tviCurrent = {0};
+						TVITEMEX tviCurrent = { 0 };
+						
+						tviCurrent.hItem = hCurrent;
+						tviCurrent.mask = TVIF_HANDLE | TVIF_TEXT;
 
 						tviCurrent.pszText = new TCHAR[MAXCHAR];
 						tviCurrent.cchTextMax = MAXCHAR;
 
-						if (TreeView_GetItem(pNMHDR->hwndFrom, &tviCurrent)) 
-							tzCurrentName = tstring(tviCurrent.pszText);
-						else
-							return false;
-
+						if (TreeView_GetItem(pNMHDR->hwndFrom, &tviCurrent))
+							svCurrentItem.push_back(tviCurrent.pszText);
+						
 						delete tviCurrent.pszText;
+
+						hCurrent = TreeView_GetParent(pNMHDR->hwndFrom, hCurrent);
 					}
-					while (1);
-
+					while (hCurrent);
+					
+					ChangeSelectedItem(svCurrentItem);
 					break;
-				}
-
-				if ( pNMHDR->code == TVN_BEGINLABELEDIT )
-				{
-
-					//hEditTreeControl = TreeView_GetEditControl(_mainDialog->_bonesTree.Hwnd());
-					break;
-				}
-
-				if ( pNMHDR->code == TVN_ENDLABELEDIT )
-				{
-					char text[256]="";
-					//GetWindowText(hEditTreeControl, text, sizeof(text)); 
-					//_mainDialog->_bonesTree.SetTextForSelection(text);
-					//hEditTreeControl = 0;
-					break; 
 				}
 			}
 			break;
 		}
 	}
 	return (INT_PTR)FALSE;
+}
+
+bool ChangeSelectedItem(StringVector svReverseItem)
+{
+	//TODO: add code here;
+	return true;
 }
 
 StringVector GetComponentNames(tstring path)
