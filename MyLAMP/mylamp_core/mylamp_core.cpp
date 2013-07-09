@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "mylamp_lib.h"
 #include "mylamp_core.h"
 
 #define MAX_LOADSTRING				100
@@ -9,17 +10,6 @@
 #define SETTINGS_WINDOW_WIDTH		600
 #define SETTINGS_WINDOW_TV_WIDTH	200
 #define SETTINGS_WINDOW_OFFSET		4
-
-#ifdef  UNICODE 
-typedef std::wstring tstring;
-#else /* UNICODE */
-typedef std::string tstring;
-#endif
-
-typedef std::vector<tstring> StringVector;
-typedef std::vector<tstring>::iterator StringVectorIterator;
-typedef std::vector<mylamp::Component*> ComponentVector;
-typedef std::vector<mylamp::Component*>::iterator ComponentVectorIterator;
 
 // Global Variables:
 HINSTANCE			hInst;										// current instance
@@ -36,7 +26,6 @@ INT_PTR CALLBACK	Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 bool				AddItemsToSettingsTree(HWND hWnd, StringVector svPath, StringVector svItems);
 void				TreeExpandAllNode(HWND hWnd);
-StringVector		GetComponentNames(tstring path);
 bool				ChangeSelectedItem(StringVector svReverseItem);
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
@@ -76,8 +65,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	return (int) msg.wParam;
 }
-
-
 
 //
 //  FUNCTION: MyRegisterClass()
@@ -229,8 +216,7 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	switch (message)
 	{	
 	case WM_INITDIALOG:
-		{
-			// <TEST CODE>		
+		{	
 			StringVector svComponentNames = GetComponentNames(TEXT("..\\debug\\*.dll"));
 
 			StringVectorIterator svIterator = svComponentNames.begin();
@@ -253,7 +239,8 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 				svIterator++;
 			}
 
-			
+		
+			// <TEST CODE>		
 			//=============================================
 			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
 
@@ -331,23 +318,6 @@ bool ChangeSelectedItem(StringVector svReverseItem)
 {
 	//TODO: add code here;
 	return true;
-}
-
-StringVector GetComponentNames(tstring path)
-{
-	StringVector svResult;
-	WIN32_FIND_DATA FindFileData;
-	HANDLE hFile = FindFirstFile(path.c_str(), &FindFileData);
-	if (hFile != INVALID_HANDLE_VALUE)
-	{
-		do
-		{
-			svResult.push_back(FindFileData.cFileName);
-		}
-		while ( FindNextFile(hFile, &FindFileData) );
-		FindClose(hFile);
-	}
-	return svResult;
 }
 
 void TreeExpandAllNode(HWND hWnd)

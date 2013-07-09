@@ -18,9 +18,14 @@ namespace mylamp
 	class Component
 	{
 	public:
+		virtual bool IsInit() = 0;
+		virtual bool IsLoad() = 0;
+
 		virtual ~Component(){};
+		virtual bool Load() = 0;
 		virtual COMPONENT_INFO GetInfo() = 0;
 		virtual UINT64 GetCoreMinVersion() = 0;
+		virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
 	};
 	
 	MYLAMP_HEADER_API Component* RegComponent(); 

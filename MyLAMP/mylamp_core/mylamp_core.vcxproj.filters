@@ -39,12 +39,18 @@
     <ClInclude Include="mylamp_header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mylamp_lib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mylamp_core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mylamp_lib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
