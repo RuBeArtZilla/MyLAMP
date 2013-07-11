@@ -1,17 +1,7 @@
 #pragma once
 
-#ifdef  UNICODE 
-typedef std::wstring tstring, TSTRING;
-#else /* UNICODE */
-typedef std::string tstring, TSTRING;
-#endif
-
-typedef std::vector<tstring> StringVector;
-typedef std::vector<tstring>::iterator StringVectorIterator;
-typedef std::vector<mylamp::Component*> ComponentVector;
-typedef std::vector<mylamp::Component*>::iterator ComponentVectorIterator;
-
 typedef mylamp::Component* (*_RegComponent)();
+typedef void (*_FreeComponent)();
 
 struct dll_detail
 {
@@ -25,15 +15,19 @@ typedef std::vector<dll_detail>::iterator DllDetailIterator;
 
 StringVector GetComponentNames(tstring tsPath);
 
-void FreeComponents(StringVector);
-
 class Components
 {
 private:
 	DllDetailVector DDV;
 
 public:
+	Components();
+	~Components();
 	bool isLoad();
 	bool Load();
-	void UnLoad();
+	void Unload();
+	DllDetailVector* getDetailVector();
 };
+
+Components* GetComponents();
+void		SetComponents(Components* pComponents);

@@ -15,7 +15,7 @@
 HINSTANCE			hInst;										// current instance
 TCHAR				szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR				szWindowClass[MAX_LOADSTRING];				// the main window class name
-ComponentVector		cvComponents;								// List of pointers to all registred components
+Components			components;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -39,7 +39,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	// TODO: Place code here.
 	MSG msg;
 	HACCEL hAccelTable;
-
+	SetComponents(&components);
+			
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 	LoadString(hInstance, IDC_MYLAMP_CORE, szWindowClass, MAX_LOADSTRING);
@@ -217,40 +218,37 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	{	
 	case WM_INITDIALOG:
 		{	
-			StringVector svComponentNames = GetComponentNames(TEXT("..\\debug\\*.dll"));
-
-			StringVectorIterator svIterator = svComponentNames.begin();
-
-			while (svIterator != svComponentNames.end())
-			{
-				HMODULE hMod = LoadLibrary(svIterator->c_str());
-				if (hMod)
-				{
-					_RegComponent pRegComponent = (_RegComponent) GetProcAddress(hMod, "RegComponent"); 
-					if (pRegComponent)
-					{
-						mylamp::Component* pComponent = pRegComponent();
-						if (pComponent)
-						{
-							cvComponents.push_back(pComponent);
-						}
-					}
-				}
-				svIterator++;
-			}
-
-		
-			// <TEST CODE>		
-			//=============================================
 			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
 
-			StringVector items, paths;
+			StringVector items, paths, paths2;
 			items.push_back(L"New Item");
 			items.push_back(L"New Item2");
 
 			paths.push_back(L"New Item");
 			AddItemsToSettingsTree(hWndTV, paths, items);
 
+			paths2.push_back(L"root2");
+
+			AddItemsToSettingsTree(hWndTV, paths2, items);
+
+			if (!components.isLoad())
+				components.Load();
+
+			DllDetailVector* ddvCurrent = components.getDetailVector();
+			DllDetailIterator ddiIterator = ddvCurrent->begin();
+			
+			do
+			{
+				settings_items si = ddiIterator->pComponent->GetSettingsItems();
+				
+				AddItemsToSettingsTree(hWndTV, si.path, si.items);
+
+				ddiIterator++;
+			}
+			while (ddiIterator != ddvCurrent->end());
+			// <TEST CODE>
+			
+			
 			paths.push_back(L"New Item2");
 			AddItemsToSettingsTree(hWndTV, paths, items);
 
@@ -352,8 +350,8 @@ HTREEITEM InsertItemToTree(HWND hWnd, HTREEITEM hParent, HTREEITEM hInsertAfter,
 
 bool AddItemsToSettingsTree(HWND hWnd, StringVector svPath, StringVector svItems)
 {
-	HTREEITEM hParent = TreeView_GetRoot(hWnd); 
-	HTREEITEM hIterator = hParent;
+	HTREEITEM hParent = NULL;
+	HTREEITEM hIterator = TreeView_GetRoot(hWnd);
 
 	if ( svItems.empty() ) 
 		return false;

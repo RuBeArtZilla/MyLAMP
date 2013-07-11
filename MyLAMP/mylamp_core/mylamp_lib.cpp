@@ -1,6 +1,22 @@
 #include "stdafx.h"
 #include "mylamp_lib.h"
 
+static Components* _pComponents = 0;
+
+
+Components* GetComponents(){return _pComponents;};
+void		SetComponents(Components* pComponents){_pComponents = pComponents;};
+
+Components::Components()
+{
+	Load();
+}
+
+Components::~Components()
+{
+	Unload();
+}
+
 StringVector GetComponentNames(tstring tsPath)
 {
 	StringVector svResult;
@@ -20,7 +36,7 @@ StringVector GetComponentNames(tstring tsPath)
 
 bool Components::Load()
 {
-	dll_detail ddTemp = { 0 };
+	dll_detail ddTemp;
 
 	StringVector svNames = GetComponentNames(TEXT("..\\debug\\*.dll"));
 	
@@ -58,7 +74,7 @@ bool Components::Load()
 	return !DDV.empty();
 }
 
-void Components::UnLoad()
+void Components::Unload()
 {
 	if (isLoad())
 	{
@@ -66,13 +82,24 @@ void Components::UnLoad()
 
 		do
 		{
-			delete ddiIterator->pComponent;
+			_FreeComponent pFreeComponent = (_FreeComponent) GetProcAddress(ddiIterator->hModule, "FreeComponent");
+			
+			if (pFreeComponent)
+				pFreeComponent();
+			else
+				delete ddiIterator->pComponent;
+
 			FreeLibrary(ddiIterator->hModule);
 
 			ddiIterator++;
 		}
 		while (ddiIterator != DDV.end());
 	}
+}
+
+DllDetailVector* Components::getDetailVector()
+{
+	return &DDV;
 }
 
 bool Components::isLoad()
