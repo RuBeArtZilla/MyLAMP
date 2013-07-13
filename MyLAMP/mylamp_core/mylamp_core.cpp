@@ -5,17 +5,12 @@
 #include "mylamp_lib.h"
 #include "mylamp_core.h"
 
-#define MAX_LOADSTRING				100
-#define SETTINGS_WINDOW_HEIGHT		450
-#define SETTINGS_WINDOW_WIDTH		600
-#define SETTINGS_WINDOW_TV_WIDTH	200
-#define SETTINGS_WINDOW_OFFSET		4
-
 // Global Variables:
 HINSTANCE			hInst;										// current instance
 TCHAR				szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR				szWindowClass[MAX_LOADSTRING];				// the main window class name
 Components			components;
+mylamp::Component*	pActiveComponentWindow = NULL;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -26,7 +21,9 @@ INT_PTR CALLBACK	Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 bool				AddItemsToSettingsTree(HWND hWnd, StringVector svPath, StringVector svItems);
 void				TreeExpandAllNode(HWND hWnd);
-bool				ChangeSelectedItem(StringVector svReverseItem);
+bool				ChangeSelectedItem(HWND hWnd, StringVector svReverseItem);
+
+
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -123,7 +120,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	GetClientRect(hWnd, &rcClient); 
 
-	InitCommonControls(); 
+	//InitCommonControls(); 
+	
+	INITCOMMONCONTROLSEX icex = { 0 };
+    icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
+    icex.dwICC  = ICC_LISTVIEW_CLASSES | ICC_TREEVIEW_CLASSES;
+    InitCommonControlsEx(&icex);
 
 	if (!hWnd)
 	{
@@ -214,8 +216,21 @@ typedef mylamp::Component* (*_RegComponent)();
 INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);
+	if (pActiveComponentWindow)
+		pActiveComponentWindow->SettingsWndProc(hDlg, message, wParam, lParam);
 	switch (message)
 	{	
+	case WM_COMPONENT_CHANGED:
+		{
+			RECT rWndTV;
+			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
+			GetWindowRect(hWndTV, &rWndTV);
+			if (wParam)
+				((mylamp::Component*)wParam)->SettingsWndProc(hDlg, WM_COMPONENT_UNSELECTED, NULL, NULL);
+			if (lParam)
+				((mylamp::Component*)lParam)->SettingsWndProc(hDlg, WM_COMPONENT_SELECTED, (WPARAM)(rWndTV.right - rWndTV.left), (LPARAM)(rWndTV.bottom - rWndTV.top));
+		}
+		break;
 	case WM_INITDIALOG:
 		{	
 			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
@@ -302,7 +317,7 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 					}
 					while (hCurrent);
 					
-					ChangeSelectedItem(svCurrentItem);
+					ChangeSelectedItem(hDlg, svCurrentItem);
 					break;
 				}
 			}
@@ -312,10 +327,25 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	return (INT_PTR)FALSE;
 }
 
-bool ChangeSelectedItem(StringVector svReverseItem)
+bool ChangeSelectedItem(HWND hWnd, StringVector svReverseItem)
 {
-	//TODO: add code here;
-	return true;
+	DllDetailVector* ddvCurrent = components.getDetailVector();
+	DllDetailIterator ddiIterator = ddvCurrent->begin();
+
+	do
+	{
+		if (ddiIterator->pComponent->CheckSelectedItem(svReverseItem))
+		{
+			SendMessage(hWnd, WM_COMPONENT_CHANGED,  (WPARAM)pActiveComponentWindow, (LPARAM)ddiIterator->pComponent);
+			pActiveComponentWindow = ddiIterator->pComponent;
+			return true;
+		}
+
+		ddiIterator++;
+	}
+	while (ddiIterator != ddvCurrent->end());
+
+	return false;
 }
 
 void TreeExpandAllNode(HWND hWnd)

@@ -1,12 +1,32 @@
 #pragma once
 
 #include "stdafx.h"
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 #ifdef  UNICODE 
 typedef std::wstring tstring;
 #else /* UNICODE */
 typedef std::string tstring;
 #endif
+
+#ifdef MYLAMP_HEADER_EXPORT
+#define MYLAMP_HEADER_API extern "C" __declspec(dllexport) 
+#else
+#define MYLAMP_HEADER_API extern "C" __declspec(dllimport) 
+#endif
+
+#define WM_COMPONENT_SELECTED (WM_APP + 0x0001)
+#define WM_COMPONENT_CHANGED (WM_APP + 0x0002)
+#define WM_COMPONENT_UNSELECTED (WM_APP + 0x0003) // WPARAM - ptr to Old Component, LPARAM - ptr to new Component
+
+#define MAX_LOADSTRING					100
+#define SETTINGS_WINDOW_HEIGHT			450
+#define SETTINGS_WINDOW_WIDTH			600
+#define SETTINGS_WINDOW_TV_WIDTH		200
+#define SETTINGS_WINDOW_OFFSET			12
+#define SETTINGS_WINDOW_BUTTON_HEIGHT	32
 
 typedef std::vector<tstring> StringVector;
 typedef std::vector<tstring>::iterator StringVectorIterator;
@@ -16,12 +36,6 @@ struct settings_items
 	StringVector path;
 	StringVector items;
 };
-
-#ifdef MYLAMP_HEADER_EXPORT
-#define MYLAMP_HEADER_API extern "C" __declspec(dllexport) 
-#else
-#define MYLAMP_HEADER_API extern "C" __declspec(dllimport) 
-#endif
 
 namespace mylamp
 {

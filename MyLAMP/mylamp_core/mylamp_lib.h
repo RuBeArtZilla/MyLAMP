@@ -31,3 +31,5 @@ public:
 
 Components* GetComponents();
 void		SetComponents(Components* pComponents);
+
+DllDetailVector GetDetailVector();
