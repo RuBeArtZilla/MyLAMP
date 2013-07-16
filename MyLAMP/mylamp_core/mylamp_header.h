@@ -52,19 +52,28 @@ namespace mylamp
 		virtual bool IsLoad() = 0;
 
 		virtual ~Component(){};
-		virtual bool Load() = 0;
+		virtual bool Load(Component* pParent = 0) = 0;
 		virtual COMPONENT_INFO GetInfo() = 0;
 		virtual UINT64 GetCoreMinVersion() = 0;
 
 		virtual settings_items GetSettingsItems() = 0; 
 		virtual bool CheckSelectedItem(StringVector svReversedItem) = 0;
 		virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
-	};
-	
+};
+
 	MYLAMP_HEADER_API Component* RegComponent(); 
 	MYLAMP_HEADER_API void FreeComponent(); 
 
 	typedef std::vector<Component*> ComponentVector;
 	typedef std::vector<Component*>::iterator ComponentVectorIterator;
 
+	struct dll_detail
+	{
+		tstring svName;
+		HMODULE hModule;
+		mylamp::Component* pComponent;
+	};
+
+	typedef std::vector<dll_detail> DllDetailVector;
+	typedef std::vector<dll_detail>::iterator DllDetailIterator;
 }

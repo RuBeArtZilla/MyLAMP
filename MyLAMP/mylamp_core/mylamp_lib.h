@@ -1,30 +1,33 @@
 #pragma once
 
+using namespace mylamp;
+
 typedef mylamp::Component* (*_RegComponent)();
 typedef void (*_FreeComponent)();
 
-struct dll_detail
-{
-	tstring svName;
-	HMODULE hModule;
-	mylamp::Component* pComponent;
-};
-
-typedef std::vector<dll_detail> DllDetailVector;
-typedef std::vector<dll_detail>::iterator DllDetailIterator;
-
 StringVector GetComponentNames(tstring tsPath);
 
-class Components
+class Components: public Component
 {
 private:
 	DllDetailVector DDV;
+	bool b_init;
+	bool b_load;
 
 public:
 	Components();
-	~Components();
+	virtual bool IsInit(){return isLoad();};
+	virtual bool IsLoad(){return isLoad();};
+
+	virtual	bool Load(Component* pParent = 0);
+	virtual ~Components();
+	virtual COMPONENT_INFO GetInfo(){COMPONENT_INFO ciResult = {1, 0}; return ciResult;};
+	virtual UINT64 GetCoreMinVersion(){return 1;};	
+	virtual settings_items GetSettingsItems(){settings_items siResult; return siResult;};
+	virtual bool CheckSelectedItem(StringVector svReversedItem){return false;};
+	virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){return (INT_PTR)FALSE;};
+
 	bool isLoad();
-	bool Load();
 	void Unload();
 	DllDetailVector* getDetailVector();
 };

@@ -3,8 +3,8 @@
 
 static Components* _pComponents = 0;
 
-Components* GetComponents(){return _pComponents;};
-void		SetComponents(Components* pComponents){_pComponents = pComponents;};
+Components*		GetComponents(){return _pComponents;};
+void			SetComponents(Components* pComponents){_pComponents = pComponents;};
 DllDetailVector GetDetailVector(){return *_pComponents->getDetailVector();};
 
 Components::Components()
@@ -34,7 +34,7 @@ StringVector GetComponentNames(tstring tsPath)
 	return svResult;
 }
 
-bool Components::Load()
+bool Components::Load(Component* pParent)
 {
 	dll_detail ddTemp;
 
@@ -57,7 +57,7 @@ bool Components::Load()
 				if (ddTemp.pComponent)
 				{
 					ddTemp.svName = *svIterator;
-					if (ddTemp.pComponent->Load())
+					if (ddTemp.pComponent->Load(this))
 						DDV.push_back(ddTemp);
 					else
 						FreeLibrary(ddTemp.hModule);

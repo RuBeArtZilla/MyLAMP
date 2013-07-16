@@ -2,11 +2,14 @@
 //
 #include "stdafx.h"
 #include "../mylamp_core/mylamp_lib.cpp"
+//#include "../mylamp_core/mylamp_core.h"
+
 
 #define UPDATER_ITEM_NAME L"Components"
 #define ID_UPDATER_LISTVIEW 1280
+
 mylamp::Component * pComponent = NULL;
-Components *		pComponents = NULL;
+//Components *		pComponents = NULL;
 
 HWND hWndLV = NULL;
 HWND		CreateListView(HWND hWnd, UINT uId, UINT x, UINT y, UINT width, UINT height);
@@ -18,12 +21,14 @@ class Updater: public mylamp::Component
 private:
 	bool b_init;
 	bool b_load;
+	mylamp::Component* p_parent;
+
 public:
 	Updater();
 	virtual bool IsInit(){return b_init;};
 	virtual bool IsLoad(){return b_load;};
 
-	virtual bool Load(){return (b_load = true);};
+	virtual bool Load(Component* pParent = 0){p_parent = pParent; return (b_load = true);};
 	virtual ~Updater(){};
 	virtual mylamp::COMPONENT_INFO GetInfo();
 	virtual UINT64 GetCoreMinVersion(){return 1;};
@@ -96,29 +101,78 @@ INT_PTR CALLBACK Updater::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam
 			AddListViewItems(hWndLV, 128, 1, 0, tstring(L"a"));
 			AddListViewItems(hWndLV, 128, 1, 1, tstring(L"b"));
 			AddListViewItems(hWndLV, 128, 1, 2, tstring(L"c"));
+			
+			//warning: experimental code ↓
+			Components*	pComponents = (Components*)p_parent;
 
+			DllDetailVector* pDDV = pComponents->getDetailVector();
 
-			DllDetailVector DDV = GetDetailVector();//error
-
-			DllDetailIterator DDI = DDV.begin();
+			DllDetailIterator DDI = pDDV->begin();
 			do
 			{
+				const TCHAR *paramNames[] = {
+					_T("FileDescription"),
+					_T("CompanyName"),
+					_T("FileVersion"),
+					_T("InternalName"),
+					_T("LegalCopyright"),
+					_T("LegalTradeMarks"),
+					_T("OriginalFilename"),
+					_T("ProductName"),
+					_T("ProductVersion"),
+					_T("Comments"),
+					_T("Author")
+				};
+				TCHAR paramNameBuf[256];
+				TCHAR *paramValue;
+				UINT paramSz;
+
+
 				DWORD dwSize = GetFileVersionInfoSize(DDI->svName.c_str(), NULL);
 				if (dwSize)
 				{
 					LPVOID pBuf = new BYTE[dwSize];
 					VS_FIXEDFILEINFO vsFFI = { 0 };
 					UINT pLen = 0;
+					struct LANGANDCODEPAGE {
+						WORD wLanguage;
+						WORD wCodePage;
+					} *pLangCodePage;
+					
 					GetFileVersionInfo(DDI->svName.c_str(), NULL, dwSize, pBuf);
 
-					BOOL bVer = VerQueryValue(pBuf, TEXT("\\"), (LPVOID*) &vsFFI, &pLen);
+					//BOOL bVer = VerQueryValue(pBuf, TEXT("\\"), (LPVOID*) &vsFFI, &pLen);
+
+					UINT cpSz;
+
+					if (VerQueryValue(pBuf, TEXT("\\VarFileInfo\\Translation"), (LPVOID*) &pLangCodePage, &cpSz))    
+					{
+						for (int cpIdx = 0; cpIdx < (int)(cpSz / sizeof(struct LANGANDCODEPAGE)); cpIdx++ )
+						{
+							for (int paramIdx = 0; paramIdx < sizeof(paramNames)/sizeof(char*); paramIdx++)
+							{
+								// формируем имя параметра ( \StringFileInfo\кодовая_страница\имя_параметра )
+								_stprintf(paramNameBuf, _T("\\StringFileInfo\\%04x%04x\\%s"),
+									pLangCodePage[cpIdx].wLanguage,  // ну, или можно сделать фильтр для
+									pLangCodePage[cpIdx].wCodePage,  // какой-то отдельной кодовой страницы
+									paramNames[paramIdx]);
+
+								// получаем значение параметра
+								if ( VerQueryValue(pBuf, paramNameBuf, (LPVOID*)&paramValue, &paramSz))
+								{
+									//TODO: Write code here
+								}
+							}
+						}	
+					}
 
 					delete pBuf;
 					//AddListViewItems(hWndLV, 128, 0, 0, DDI->pComponent->GetInfo().version);
 				}
 				DDI++;
 			}
-			while(DDI != DDV.end());
+			while(DDI != pDDV->end());
+
 		}
 		break;
 
