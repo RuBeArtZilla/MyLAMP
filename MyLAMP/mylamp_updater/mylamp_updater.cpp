@@ -92,83 +92,29 @@ INT_PTR CALLBACK Updater::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam
 			svHeader.push_back(L"Name");
 			svHeader.push_back(L"Version");
 			svHeader.push_back(L"Module");
-			
+			svHeader.push_back(L"Description");
+
 			SetListViewColumns(hWndLV, /*TODO: remove number*/128, svHeader);
-			//TODO: Delete test code ↓
-			AddListViewItems(hWndLV, 128, 0, 0, tstring(L"1"));
-			AddListViewItems(hWndLV, 128, 0, 1, tstring(L"2"));
-			AddListViewItems(hWndLV, 128, 0, 2, tstring(L"3"));
-			AddListViewItems(hWndLV, 128, 1, 0, tstring(L"a"));
-			AddListViewItems(hWndLV, 128, 1, 1, tstring(L"b"));
-			AddListViewItems(hWndLV, 128, 1, 2, tstring(L"c"));
 			
-			//warning: experimental code ↓
+			//experimental code ↓
 			Components*	pComponents = (Components*)p_parent;
 
 			DllDetailVector* pDDV = pComponents->getDetailVector();
-
 			DllDetailIterator DDI = pDDV->begin();
+			int iRowIndex = 0;
 			do
 			{
-				const TCHAR *paramNames[] = {
-					_T("FileDescription"),
-					_T("CompanyName"),
-					_T("FileVersion"),
-					_T("InternalName"),
-					_T("LegalCopyright"),
-					_T("LegalTradeMarks"),
-					_T("OriginalFilename"),
-					_T("ProductName"),
-					_T("ProductVersion"),
-					_T("Comments"),
-					_T("Author")
-				};
-				TCHAR paramNameBuf[256];
-				TCHAR *paramValue;
-				UINT paramSz;
+				tstring tsFileVersion = GetFileVersionInfo(DDI->svName, FI_FILE_VERSION);
+				tstring tsInternalName = GetFileVersionInfo(DDI->svName, FI_INTERNAL_NAME);
+				tstring tsProductName = GetFileVersionInfo(DDI->svName, FI_PRODUCT_NAME);
+				tstring tsFileDescription = GetFileVersionInfo(DDI->svName, FI_FILE_DESCRIPTION);
+				
+				AddListViewItems(hWndLV, 128, iRowIndex, 0, tsProductName);
+				AddListViewItems(hWndLV, 128, iRowIndex, 1, tsFileVersion);
+				AddListViewItems(hWndLV, 128, iRowIndex, 2, tsInternalName);
+				AddListViewItems(hWndLV, 128, iRowIndex, 3, tsFileDescription);
 
-
-				DWORD dwSize = GetFileVersionInfoSize(DDI->svName.c_str(), NULL);
-				if (dwSize)
-				{
-					LPVOID pBuf = new BYTE[dwSize];
-					VS_FIXEDFILEINFO vsFFI = { 0 };
-					UINT pLen = 0;
-					struct LANGANDCODEPAGE {
-						WORD wLanguage;
-						WORD wCodePage;
-					} *pLangCodePage;
-					
-					GetFileVersionInfo(DDI->svName.c_str(), NULL, dwSize, pBuf);
-
-					//BOOL bVer = VerQueryValue(pBuf, TEXT("\\"), (LPVOID*) &vsFFI, &pLen);
-
-					UINT cpSz;
-
-					if (VerQueryValue(pBuf, TEXT("\\VarFileInfo\\Translation"), (LPVOID*) &pLangCodePage, &cpSz))    
-					{
-						for (int cpIdx = 0; cpIdx < (int)(cpSz / sizeof(struct LANGANDCODEPAGE)); cpIdx++ )
-						{
-							for (int paramIdx = 0; paramIdx < sizeof(paramNames)/sizeof(char*); paramIdx++)
-							{
-								// формируем имя параметра ( \StringFileInfo\кодовая_страница\имя_параметра )
-								_stprintf(paramNameBuf, _T("\\StringFileInfo\\%04x%04x\\%s"),
-									pLangCodePage[cpIdx].wLanguage,  // ну, или можно сделать фильтр для
-									pLangCodePage[cpIdx].wCodePage,  // какой-то отдельной кодовой страницы
-									paramNames[paramIdx]);
-
-								// получаем значение параметра
-								if ( VerQueryValue(pBuf, paramNameBuf, (LPVOID*)&paramValue, &paramSz))
-								{
-									//TODO: Write code here
-								}
-							}
-						}	
-					}
-
-					delete pBuf;
-					//AddListViewItems(hWndLV, 128, 0, 0, DDI->pComponent->GetInfo().version);
-				}
+				iRowIndex++;
 				DDI++;
 			}
 			while(DDI != pDDV->end());
