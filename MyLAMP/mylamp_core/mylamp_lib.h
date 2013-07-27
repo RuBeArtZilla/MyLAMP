@@ -26,6 +26,7 @@ public:
 	virtual settings_items GetSettingsItems(){settings_items siResult; return siResult;};
 	virtual bool CheckSelectedItem(StringVector svReversedItem){return false;};
 	virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){return (INT_PTR)FALSE;};
+	virtual INT_PTR CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){return (INT_PTR)FALSE;};
 
 	bool isLoad();
 	void Unload();

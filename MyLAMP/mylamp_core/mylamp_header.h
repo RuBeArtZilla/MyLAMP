@@ -59,7 +59,8 @@ namespace mylamp
 		virtual settings_items GetSettingsItems() = 0; 
 		virtual bool CheckSelectedItem(StringVector svReversedItem) = 0;
 		virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
-};
+		virtual INT_PTR CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
+	};
 
 	MYLAMP_HEADER_API Component* RegComponent(); 
 	MYLAMP_HEADER_API void FreeComponent(); 

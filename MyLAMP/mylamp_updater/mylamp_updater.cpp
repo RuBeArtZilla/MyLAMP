@@ -35,6 +35,7 @@ public:
 	virtual settings_items GetSettingsItems(); 	
 	virtual bool CheckSelectedItem(StringVector svReversedItem);
 	virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	virtual INT_PTR CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){return (INT_PTR)FALSE;};
 };
 
 Updater::Updater()
