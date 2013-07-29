@@ -231,20 +231,10 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 				((mylamp::Component*)lParam)->SettingsWndProc(hDlg, WM_COMPONENT_SELECTED, (WPARAM)(rWndTV.right - rWndTV.left), (LPARAM)(rWndTV.bottom - rWndTV.top));
 		}
 		break;
+
 	case WM_INITDIALOG:
 		{	
 			HWND hWndTV = GetDlgItem(hDlg, IDC_SET_TREE);
-
-			StringVector items, paths, paths2;
-			items.push_back(L"New Item");
-			items.push_back(L"New Item2");
-
-			paths.push_back(L"New Item");
-			AddItemsToSettingsTree(hWndTV, paths, items);
-
-			paths2.push_back(L"root2");
-
-			AddItemsToSettingsTree(hWndTV, paths2, items);
 
 			if (!components.isLoad())
 				components.Load();
@@ -261,17 +251,8 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 				ddiIterator++;
 			}
 			while (ddiIterator != ddvCurrent->end());
-			// <TEST CODE>
 			
-			
-			paths.push_back(L"New Item2");
-			AddItemsToSettingsTree(hWndTV, paths, items);
-
-			paths.push_back(L"New Item");
-			AddItemsToSettingsTree(hWndTV, paths, items);
-
 			TreeExpandAllNode(hWndTV);
-			// </TEST CODE>
 
 			return (INT_PTR)TRUE;
 		}
