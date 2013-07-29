@@ -31,10 +31,14 @@ public:
 	virtual ~Updater(){};
 	virtual mylamp::COMPONENT_INFO GetInfo();
 	virtual UINT64 GetCoreMinVersion(){return 1;};
+	
 	virtual settings_items GetSettingsItems(); 	
 	virtual bool CheckSelectedItem(StringVector svReversedItem);
+	
 	virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	virtual INT_PTR CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){return (INT_PTR)FALSE;};
+
+	virtual bool AddWndProc(_WndProc wndproc){return false;};
+	virtual bool DelWndProc(_WndProc wndproc){return false;};
 };
 
 Updater::Updater()
@@ -135,7 +139,7 @@ INT_PTR CALLBACK Updater::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam
 HWND CreateListView(HWND hWnd, UINT uId, UINT x, UINT y, UINT width, UINT height)
 {
     HWND hWndLV = CreateWindow(WC_LISTVIEW, L"", WS_CHILD | LVS_REPORT | WS_VISIBLE, x, y, width, height, hWnd, (HMENU)uId, GetModuleHandle(NULL), NULL);
-    ListView_SetExtendedListViewStyleEx(hWndLV, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+    ListView_SetExtendedListViewStyleEx(hWndLV, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_DOUBLEBUFFER );
 	return hWndLV;
 }
 
@@ -145,8 +149,9 @@ int SetListViewColumns(HWND hWndLV, int textMaxLen, StringVector svHeader)
     GetClientRect(hWndLV, &rcl);
    
     LVCOLUMN lvc;
-    lvc.mask = LVCF_TEXT | LVCF_WIDTH;
+    lvc.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_MINWIDTH;
 	lvc.cx = (rcl.right - rcl.left) / svHeader.size();
+	lvc.cxMin = 24;
     lvc.cchTextMax = textMaxLen;
  
 	StringVectorIterator sviIterator = svHeader.begin();

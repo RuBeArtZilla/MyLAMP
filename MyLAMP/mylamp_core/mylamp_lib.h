@@ -11,6 +11,7 @@ class Components: public Component
 {
 private:
 	DllDetailVector DDV;
+	WndProcVector v_WndProc;
 	bool b_init;
 	bool b_load;
 
@@ -23,14 +24,19 @@ public:
 	virtual ~Components();
 	virtual COMPONENT_INFO GetInfo(){COMPONENT_INFO ciResult = {1, 0}; return ciResult;};
 	virtual UINT64 GetCoreMinVersion(){return 1;};	
+	
 	virtual settings_items GetSettingsItems(){settings_items siResult; return siResult;};
 	virtual bool CheckSelectedItem(StringVector svReversedItem){return false;};
+	
 	virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){return (INT_PTR)FALSE;};
-	virtual INT_PTR CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){return (INT_PTR)FALSE;};
 
+	virtual bool AddWndProc(_WndProc wndproc);
+	virtual bool DelWndProc(_WndProc wndproc);
+	
 	bool isLoad();
 	void Unload();
-	DllDetailVector* getDetailVector();
+	DllDetailVector* getDetailVector(){return &DDV;};
+	WndProcVector*	 getWndProcVector(){return &v_WndProc;};
 };
 
 Components* GetComponents();

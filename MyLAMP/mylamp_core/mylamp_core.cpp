@@ -90,7 +90,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hInstance		= hInstance;
 	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MYLAMP_CORE));
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= (HBRUSH)(COLOR_BACKGROUND)/*(COLOR_WINDOW+1)*/;
+	wcex.hbrBackground	= (HBRUSH)0/*(COLOR_BACKGROUND)/*(COLOR_WINDOW+1)*/;
 	wcex.lpszMenuName	= MAKEINTRESOURCE(IDC_MYLAMP_CORE);
 	wcex.lpszClassName	= szWindowClass;
 	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
@@ -115,7 +115,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	hInst = hInstance; // Store instance handle in our global variable
 
-	hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+	hWnd = CreateWindowEx(WS_EX_COMPOSITED | WS_EX_CONTROLPARENT, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, 0, SETTINGS_WINDOW_WIDTH, SETTINGS_WINDOW_HEIGHT, NULL, NULL, hInstance, NULL);
 
 	GetClientRect(hWnd, &rcClient); 
@@ -153,6 +153,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
+
+	WndProcVector* pWndProcVector = components.getWndProcVector();
+
+	if (!pWndProcVector->empty())
+	{
+		WndProcIterator wpiIterator = pWndProcVector->begin();
+		do
+		{
+			(*wpiIterator)(hWnd, message, wParam, lParam);
+			wpiIterator++;
+		}
+		while (wpiIterator != pWndProcVector->end());
+	}
 
 	switch (message)
 	{

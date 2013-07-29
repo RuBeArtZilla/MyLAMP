@@ -97,9 +97,36 @@ void Components::Unload()
 	}
 }
 
-DllDetailVector* Components::getDetailVector()
+
+bool Components::AddWndProc(_WndProc wndproc)
 {
-	return &DDV;
+	//TODO: check input
+	if (wndproc)
+		v_WndProc.push_back(wndproc);
+
+	return false;
+}
+
+bool Components::DelWndProc(_WndProc wndproc)
+{
+	//TODO: test this function
+	WndProcIterator wpiIterator = v_WndProc.begin();
+
+	if (!v_WndProc.empty())
+	{
+		do
+		{
+			if (*wpiIterator == wndproc)
+			{
+				v_WndProc.erase(wpiIterator);
+				return true;
+			}
+
+			wpiIterator++;
+		}
+		while (wpiIterator != v_WndProc.end());
+	}
+	return false;
 }
 
 bool Components::isLoad()

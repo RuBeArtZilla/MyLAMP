@@ -1,15 +1,19 @@
-﻿// mylamp_cui.cpp : Defines the exported functions for the DLL application.
+// mylamp_uiex.cpp : Defines the exported functions for the DLL application.
 //
 
 #include "stdafx.h"
 
-#define CUI_ITEM_NAME L"ClassicUI"
-#define CUI_PARENT_ITEM_NAME L"Display"
+
+#define UIEX_ITEM_NAME L"UI Extended"
+#define UIEX_PARENT_ITEM_NAME L"Display"
 #include "../mylamp_core/mylamp_lib.cpp"
 
 mylamp::Component * pComponent = NULL;
+bool bInitUI = false;
 
-class ClassicUI: public mylamp::Component
+INT_PTR MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+class UIEX: public mylamp::Component
 {
 private:
 	bool b_init;
@@ -17,12 +21,12 @@ private:
 	mylamp::Component* p_parent;
 
 public:
-	ClassicUI();
+	UIEX();
 	virtual bool IsInit(){return b_init;};
 	virtual bool IsLoad(){return b_load;};
 
-	virtual bool Load(Component* pParent = 0){p_parent = pParent; return (b_load = true);};
-	virtual ~ClassicUI(){};
+	virtual bool Load(Component* pParent = 0);
+	virtual ~UIEX(){};
 	virtual mylamp::COMPONENT_INFO GetInfo();
 	virtual UINT64 GetCoreMinVersion(){return 1;};
 	
@@ -30,46 +34,70 @@ public:
 	virtual bool CheckSelectedItem(StringVector svReversedItem);
 
 	virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
+	
 	virtual bool AddWndProc(_WndProc wndproc){return false;};
 	virtual bool DelWndProc(_WndProc wndproc){return false;};
 };
 
+INT_PTR MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	if (!bInitUI)
+	{
+		MARGINS mar = { 0, 0, 0, 100 };
 
-ClassicUI::ClassicUI()
+		DwmExtendFrameIntoClientArea(hWnd, &mar);
+		
+		/*if(!AeroAutoSubclass(m_hWnd, ASC_SUBCLASS_ALL_CONTROLS, 0L))
+		{
+			//TODO: error
+		}*/
+
+		bInitUI = true;
+	}
+	return (INT_PTR)FALSE;
+};
+
+UIEX::UIEX()
 {
 	b_init = false;
 	b_load = false;
 }
 
-mylamp::COMPONENT_INFO ClassicUI::GetInfo()
+bool UIEX::Load(Component* pParent)
+{
+	p_parent = pParent; 
+	pParent->AddWndProc(MainWndProc); 
+	return (b_load = true);
+}
+
+mylamp::COMPONENT_INFO UIEX::GetInfo()
 {
 	mylamp::COMPONENT_INFO ciResult = {1, 0};
 	return ciResult;
 }
 
-settings_items ClassicUI::GetSettingsItems() 
+settings_items UIEX::GetSettingsItems() 
 {
 	settings_items siResult;
-	siResult.items.push_back(CUI_ITEM_NAME);
-	siResult.path.push_back(CUI_PARENT_ITEM_NAME);
+	siResult.items.push_back(UIEX_ITEM_NAME);
+	siResult.path.push_back(UIEX_PARENT_ITEM_NAME);
 	return siResult;
 }
 
-bool ClassicUI::CheckSelectedItem(StringVector svReversedItem)
+bool UIEX::CheckSelectedItem(StringVector svReversedItem)
 {
 	//TODO: rewrite this code
 	if (svReversedItem.size() != 2)
 		return false;
 
-	if (	(!svReversedItem.at(0).compare(CUI_ITEM_NAME)) &&
-			(!svReversedItem.at(1).compare(CUI_PARENT_ITEM_NAME))	)
+	if (	(!svReversedItem.at(0).compare(UIEX_ITEM_NAME)) &&
+			(!svReversedItem.at(1).compare(UIEX_PARENT_ITEM_NAME))	)
 		return true;
 
 	return false;
 }
 
-INT_PTR CALLBACK ClassicUI::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK UIEX::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{	
@@ -97,7 +125,7 @@ INT_PTR CALLBACK ClassicUI::SettingsWndProc(HWND hWnd, UINT message, WPARAM wPar
 
 MYLAMP_HEADER_API mylamp::Component* RegComponent()
 {
-	pComponent = new ClassicUI();
+	pComponent = new UIEX();
 	return pComponent;
 }; 
 
@@ -105,3 +133,4 @@ MYLAMP_HEADER_API void FreeComponent()
 {
 	delete pComponent;
 };
+
