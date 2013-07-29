@@ -2,8 +2,7 @@
 //
 #include "stdafx.h"
 #include "../mylamp_core/mylamp_lib.cpp"
-//#include "../mylamp_core/mylamp_core.h"
-
+#include "../mylamp_core/ver_info.cpp"
 
 #define UPDATER_ITEM_NAME L"Components"
 #define ID_UPDATER_LISTVIEW 1280
