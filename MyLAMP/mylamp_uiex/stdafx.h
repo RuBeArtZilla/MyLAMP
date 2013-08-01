@@ -16,3 +16,10 @@
 // TODO: reference additional headers your program requires here
 #define MYLAMP_HEADER_EXPORT 1
 #include "../mylamp_core/mylamp_header.h"
+
+#pragma comment(lib, "dwmapi.lib") 
+#include <dwmapi.h>
+//TODO: check define
+//#define WINVER         0x0600
+//#define _WIN32_WINNT   0x0600
+//#define _WIN32_IE      0x0700

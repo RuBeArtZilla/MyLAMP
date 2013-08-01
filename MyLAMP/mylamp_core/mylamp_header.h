@@ -31,6 +31,10 @@ typedef std::string tstring;
 typedef std::vector<tstring> StringVector;
 typedef std::vector<tstring>::iterator StringVectorIterator;
 
+typedef INT_PTR (*_WndProc)(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+typedef std::vector<_WndProc> WndProcVector;
+typedef std::vector<_WndProc>::iterator WndProcIterator;
+
 struct settings_items
 {
 	StringVector path;
@@ -59,7 +63,9 @@ namespace mylamp
 		virtual settings_items GetSettingsItems() = 0; 
 		virtual bool CheckSelectedItem(StringVector svReversedItem) = 0;
 		virtual INT_PTR CALLBACK SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
-};
+		virtual bool AddWndProc(_WndProc wndproc) = 0;
+		virtual bool DelWndProc(_WndProc wndproc) = 0;
+	};
 
 	MYLAMP_HEADER_API Component* RegComponent(); 
 	MYLAMP_HEADER_API void FreeComponent(); 
