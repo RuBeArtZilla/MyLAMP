@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mylamp_core.h" />
+    <ClInclude Include="mylamp_filetags.h" />
     <ClInclude Include="mylamp_header.h" />
     <ClInclude Include="mylamp_lib.h" />
     <ClInclude Include="Resource.h" />
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mylamp_core.cpp" />
+    <ClCompile Include="mylamp_filetags.cpp" />
     <ClCompile Include="mylamp_lib.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

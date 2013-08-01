@@ -36,18 +36,21 @@ public:
 };
 
 
+//---------------------------------------------------------------------------
 ClassicUI::ClassicUI()
 {
 	b_init = false;
 	b_load = false;
 }
 
+//---------------------------------------------------------------------------
 mylamp::COMPONENT_INFO ClassicUI::GetInfo()
 {
 	mylamp::COMPONENT_INFO ciResult = {1, 0};
 	return ciResult;
 }
 
+//---------------------------------------------------------------------------
 settings_items ClassicUI::GetSettingsItems() 
 {
 	settings_items siResult;
@@ -56,6 +59,7 @@ settings_items ClassicUI::GetSettingsItems()
 	return siResult;
 }
 
+//---------------------------------------------------------------------------
 bool ClassicUI::CheckSelectedItem(StringVector svReversedItem)
 {
 	//TODO: rewrite this code
@@ -69,6 +73,7 @@ bool ClassicUI::CheckSelectedItem(StringVector svReversedItem)
 	return false;
 }
 
+//---------------------------------------------------------------------------
 INT_PTR CALLBACK ClassicUI::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -95,13 +100,16 @@ INT_PTR CALLBACK ClassicUI::SettingsWndProc(HWND hWnd, UINT message, WPARAM wPar
 	return (INT_PTR)FALSE;
 };
 
+//---------------------------------------------------------------------------
 MYLAMP_HEADER_API mylamp::Component* RegComponent()
 {
 	pComponent = new ClassicUI();
 	return pComponent;
-}; 
+}
 
+//---------------------------------------------------------------------------
 MYLAMP_HEADER_API void FreeComponent()
 {
 	delete pComponent;
-};
+	pComponent = NULL;
+}

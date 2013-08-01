@@ -15,6 +15,7 @@ HWND		CreateListView(HWND hWnd, UINT uId, UINT x, UINT y, UINT width, UINT heigh
 int			SetListViewColumns(HWND hWndLV, int textMaxLen, StringVector svHeader);
 BOOL WINAPI AddListViewItems(HWND hWndLV, int textMaxLen, UINT uRow, UINT uColumn, tstring tsText);
 
+//---------------------------------------------------------------------------
 class Updater: public mylamp::Component
 {
 private:
@@ -41,18 +42,21 @@ public:
 	virtual bool DelWndProc(_WndProc wndproc){return false;};
 };
 
+//---------------------------------------------------------------------------
 Updater::Updater()
 {
 	b_init = false;
 	b_load = false;
 }
 
+//---------------------------------------------------------------------------
 mylamp::COMPONENT_INFO Updater::GetInfo()
 {
 	mylamp::COMPONENT_INFO ciResult = {1, 0};
 	return ciResult;
 }
 
+//---------------------------------------------------------------------------
 settings_items Updater::GetSettingsItems() 
 {
 	settings_items siResult;
@@ -60,6 +64,7 @@ settings_items Updater::GetSettingsItems()
 	return siResult;
 }
 
+//---------------------------------------------------------------------------
 bool Updater::CheckSelectedItem(StringVector svReversedItem)
 {
 	if (svReversedItem.size() != 1)
@@ -71,6 +76,7 @@ bool Updater::CheckSelectedItem(StringVector svReversedItem)
 	return false;
 }
 
+//---------------------------------------------------------------------------
 INT_PTR CALLBACK Updater::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -135,7 +141,8 @@ INT_PTR CALLBACK Updater::SettingsWndProc(HWND hWnd, UINT message, WPARAM wParam
 	}
 	return (INT_PTR)FALSE;
 };
-	
+
+//---------------------------------------------------------------------------
 HWND CreateListView(HWND hWnd, UINT uId, UINT x, UINT y, UINT width, UINT height)
 {
     HWND hWndLV = CreateWindow(WC_LISTVIEW, L"", WS_CHILD | LVS_REPORT | WS_VISIBLE, x, y, width, height, hWnd, (HMENU)uId, GetModuleHandle(NULL), NULL);
@@ -143,6 +150,7 @@ HWND CreateListView(HWND hWnd, UINT uId, UINT x, UINT y, UINT width, UINT height
 	return hWndLV;
 }
 
+//---------------------------------------------------------------------------
 int SetListViewColumns(HWND hWndLV, int textMaxLen, StringVector svHeader)
 {
     RECT rcl;
@@ -170,6 +178,7 @@ int SetListViewColumns(HWND hWndLV, int textMaxLen, StringVector svHeader)
     return index;
 }
 
+//---------------------------------------------------------------------------
 BOOL WINAPI AddListViewItems(HWND hWndLV, int textMaxLen, UINT uRow, UINT uColumn, tstring tsText)
 {
 	if (uColumn == 0)
@@ -187,14 +196,16 @@ BOOL WINAPI AddListViewItems(HWND hWndLV, int textMaxLen, UINT uRow, UINT uColum
 	return true;
 }
 
+//---------------------------------------------------------------------------
 MYLAMP_HEADER_API mylamp::Component* RegComponent()
 {
 	pComponent = new Updater();
 	return pComponent;
-}; 
+}
 
+//---------------------------------------------------------------------------
 MYLAMP_HEADER_API void FreeComponent()
 {
 	delete pComponent;
-};
-
+	pComponent = NULL;
+}

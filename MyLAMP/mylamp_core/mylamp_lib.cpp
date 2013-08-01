@@ -7,16 +7,19 @@ Components*		GetComponents(){return _pComponents;};
 void			SetComponents(Components* pComponents){_pComponents = pComponents;};
 DllDetailVector GetDetailVector(){return *_pComponents->getDetailVector();};
 
+//---------------------------------------------------------------------------
 Components::Components()
 {
 	Load();
 }
 
+//---------------------------------------------------------------------------
 Components::~Components()
 {
 	Unload();
 }
 
+//---------------------------------------------------------------------------
 StringVector GetComponentNames(tstring tsPath)
 {
 	StringVector svResult;
@@ -34,6 +37,7 @@ StringVector GetComponentNames(tstring tsPath)
 	return svResult;
 }
 
+//---------------------------------------------------------------------------
 bool Components::Load(Component* pParent)
 {
 	dll_detail ddTemp;
@@ -74,6 +78,7 @@ bool Components::Load(Component* pParent)
 	return !DDV.empty();
 }
 
+//---------------------------------------------------------------------------
 void Components::Unload()
 {
 	if (isLoad())
@@ -87,7 +92,10 @@ void Components::Unload()
 			if (pFreeComponent)
 				pFreeComponent();
 			else
+			{
 				delete ddiIterator->pComponent;
+				ddiIterator->pComponent = NULL;
+			}
 
 			FreeLibrary(ddiIterator->hModule);
 
@@ -98,6 +106,7 @@ void Components::Unload()
 }
 
 
+//---------------------------------------------------------------------------
 bool Components::AddWndProc(_WndProc wndproc)
 {
 	//TODO: check input
@@ -107,6 +116,7 @@ bool Components::AddWndProc(_WndProc wndproc)
 	return false;
 }
 
+//---------------------------------------------------------------------------
 bool Components::DelWndProc(_WndProc wndproc)
 {
 	//TODO: test this function
@@ -129,6 +139,7 @@ bool Components::DelWndProc(_WndProc wndproc)
 	return false;
 }
 
+//---------------------------------------------------------------------------
 bool Components::isLoad()
 {
 	return !DDV.empty();

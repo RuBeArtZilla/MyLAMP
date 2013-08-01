@@ -305,7 +305,8 @@ INT_PTR CALLBACK Preferences(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 						if (TreeView_GetItem(pNMHDR->hwndFrom, &tviCurrent))
 							svCurrentItem.push_back(tviCurrent.pszText);
 						
-						delete tviCurrent.pszText;
+						delete[] tviCurrent.pszText;
+						tviCurrent.pszText = NULL;
 
 						hCurrent = TreeView_GetParent(pNMHDR->hwndFrom, hCurrent);
 					}
@@ -405,8 +406,9 @@ bool AddItemsToSettingsTree(HWND hWnd, StringVector svPath, StringVector svItems
 					else
 						return false;
 					
-					delete tviCurrent.pszText;
-					
+					delete[] tviCurrent.pszText;
+					tviCurrent.pszText = NULL;
+
 					if (svIterator->compare(tzCurrentName))
 						hIterator = TreeView_GetNextSibling(hWnd, hIterator);
 				}
