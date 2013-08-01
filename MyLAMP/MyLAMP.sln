@@ -5,6 +5,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_core", "mylamp_core\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_updater", "mylamp_updater\mylamp_updater.vcxproj", "{EC27971D-4956-4A23-9398-1E75225CB464}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_cui", "mylamp_cui\mylamp_cui.vcxproj", "{D97AB01B-915D-47D5-8687-F1C65EB78966}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_uiex", "mylamp_uiex\mylamp_uiex.vcxproj", "{D36DB06E-B162-4292-8B72-C22212C92851}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +23,14 @@ Global
 		{EC27971D-4956-4A23-9398-1E75225CB464}.Debug|Win32.Build.0 = Debug|Win32
 		{EC27971D-4956-4A23-9398-1E75225CB464}.Release|Win32.ActiveCfg = Release|Win32
 		{EC27971D-4956-4A23-9398-1E75225CB464}.Release|Win32.Build.0 = Release|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Debug|Win32.Build.0 = Debug|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Release|Win32.ActiveCfg = Release|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Release|Win32.Build.0 = Release|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.Debug|Win32.Build.0 = Debug|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.Release|Win32.ActiveCfg = Release|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
