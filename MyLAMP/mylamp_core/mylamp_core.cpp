@@ -1,9 +1,10 @@
-// mylamp_core.cpp : Defines the entry point for the application.
+﻿// mylamp_core.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
 #include "mylamp_lib.h"
 #include "mylamp_core.h"
+#include "mylamp_filetags.h"
 
 // Global Variables:
 HINSTANCE			hInst;										// current instance
@@ -37,7 +38,17 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	MSG msg;
 	HACCEL hAccelTable;
 	SetComponents(&components);
-			
+
+	// TEST CODE
+	
+	Component* pcTest = new FileTags();
+	FileTags* pFT = (FileTags*)pcTest;
+	
+	pFT->GetFileTags(L"D:\\Audio\\Lossless\\Angel Beats!\\Angel Beats! – Insert Song Single 1 – Crow Song\\03 My Song.flac");
+
+	
+	delete pcTest;
+	
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 	LoadString(hInstance, IDC_MYLAMP_CORE, szWindowClass, MAX_LOADSTRING);

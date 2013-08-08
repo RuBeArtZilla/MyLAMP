@@ -10,7 +10,7 @@ private:
 	mylamp::Component* p_parent;
 
 public:
-	FileTags();
+	FileTags(){b_init = false; b_load = false;};
 	virtual bool IsInit(){return b_init;};
 	virtual bool IsLoad(){return b_load;};
 

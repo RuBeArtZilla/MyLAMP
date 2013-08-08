@@ -46,7 +46,7 @@ bool Components::Load(Component* pParent)
 	
 	if (svNames.empty())
 		return false;
-	
+
 	StringVectorIterator svIterator = svNames.begin();
 
 	while (svIterator != svNames.end())
