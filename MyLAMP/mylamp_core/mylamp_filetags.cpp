@@ -25,6 +25,10 @@ struct METADATA_BLOCK_HEADER
 #define MBH_CUESHEET				0x05
 #define MBH_PICTURE					0x06
 
+struct METADATA_BLOCK_STREAMINFO
+{
+
+};
 
 //---------------------------------------------------------------------------
 void FileTags::GetFileTags(tstring file)
@@ -52,23 +56,27 @@ void test_code(tstring file)
 			{
 				UINT32 header_lenght = 0x00ffffff & (buf[1] << 16) | (buf[2] << 8) | (buf[3]);
 				UINT32 remained_data = header_lenght;
-				
-/*
-<16>	 The minimum block size (in samples) used in the stream.
-<16>	 The maximum block size (in samples) used in the stream. (Minimum blocksize == maximum blocksize) implies a fixed-blocksize stream.
-<24>	 The minimum frame size (in bytes) used in the stream. May be 0 to imply the value is not known.
-<24>	 The maximum frame size (in bytes) used in the stream. May be 0 to imply the value is not known.
-<20>	 Sample rate in Hz. Though 20 bits are available, the maximum sample rate is limited by the structure of frame headers to 655350Hz. Also, a value of 0 is invalid.
-<3>	 (number of channels)-1. FLAC supports from 1 to 8 channels
-<5>	 (bits per sample)-1. FLAC supports from 4 to 32 bits per sample. Currently the reference encoder and decoders only support up to 24 bits per sample.
-<36>	 Total samples in stream. 'Samples' means inter-channel sample, i.e. one second of 44.1Khz audio will have 44100 samples regardless of the number of channels. A value of zero here means the number of total samples is unknown.
-*/
+
 				sFile.read(buf, remained_data);
 
-				UINT16 min_block_size = (buf[0] << 8) | (buf[1]);
-				UINT16 max_block_size = (buf[2] << 8) | (buf[3]);
+				UINT16 min_block_size = (buf[0] << 8) | (buf[1]);//<16> The minimum block size (in samples) used in the stream. 0-15 invalid.
+				UINT16 max_block_size = (buf[2] << 8) | (buf[3]);//<16> The maximum block size (in samples) used in the stream. 0-15 invalid.
 
+				bool fixed_block_size = (min_block_size == max_block_size);//Implies a fixed-blocksize stream.
 
+				UINT32 min_frame_size = 0x00ffffff & (buf[4] << 16) | (buf[5] << 8) | (buf[6]);//<24> The minimum frame size (in bytes) used in the stream. May be 0 to imply the value is not known.
+				UINT32 max_frame_size = 0x00ffffff & (buf[7] << 16) | (buf[8] << 8) | (buf[9]);//<24> The maximum frame size (in bytes) used in the stream. May be 0 to imply the value is not known.
+
+				UINT32 sample_rate = (buf[10] << 12) | (0x00000fff & ((buf[11] << 4) | (0x0f & (buf[12] >> 4))));//<20> Sample rate in Hz. Though 20 bits are available, the maximum sample rate is limited by the structure of frame headers to 655350Hz. Also, a value of 0 is invalid.
+
+				UINT16 channels_number = (0x07 & (buf[12] >> 1)) + 1;//<3> FLAC supports from 1 to 8 channels
+
+				UINT16 bps = (0x1f & (0x10 & (buf[12] << 4)) | (0x0f & (buf[13] >> 4))) + 1;//<5> FLAC supports from 4 to 32 bits per sample. Currently the reference encoder and decoders only support up to 24 bits per sample.
+				
+				UINT64 samples = buf[17] | 0xff00&(buf[16]<<8) | 0xff0000&(buf[15]<<16) | 0xff000000&(buf[14]<<24) | 0x0f00000000&((0x0f&buf[13])<<32);//<36> Total samples in stream. 'Samples' means inter-channel sample, i.e. one second of 44.1Khz audio will have 44100 samples regardless of the number of channels. A value of zero here means the number of total samples is unknown.
+
+				char md5[16] = { 0 };
+				memcpy(md5, &buf[18], ( (sizeof (char)) * 16));
 
 				tstring test;
 			}
