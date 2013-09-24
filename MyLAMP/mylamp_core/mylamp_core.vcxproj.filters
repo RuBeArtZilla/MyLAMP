@@ -48,6 +48,15 @@
     <ClInclude Include="mylamp_filetags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mylamp_out.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mlp_settings_connector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mlp_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -63,6 +72,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mylamp_filetags.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mylamp_out.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mlp_settings_connector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

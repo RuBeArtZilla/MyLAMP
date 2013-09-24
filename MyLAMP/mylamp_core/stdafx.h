@@ -16,9 +16,11 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#include <vector>
+#include <list>
+#include <fstream>
 
 
 // Additional headers
 #include "commctrl.h"
-#include <vector>
 #include "mylamp_header.h"

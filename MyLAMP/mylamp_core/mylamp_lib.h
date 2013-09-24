@@ -5,6 +5,9 @@ using namespace mylamp;
 typedef mylamp::Component* (*_RegComponent)();
 typedef void (*_FreeComponent)();
 
+#define COMPONENTS_PATH			L"components\\"
+#define COMPONENTS_PATH_FILTER	L"*.dll"
+
 StringVector GetComponentNames(tstring tsPath);
 
 class Components: public Component

@@ -22,14 +22,17 @@ Components::~Components()
 //---------------------------------------------------------------------------
 StringVector GetComponentNames(tstring tsPath)
 {
+	tstring tsFindPath = COMPONENTS_PATH_FILTER;
+	tsFindPath.insert(tsFindPath.begin(), tsPath.begin(), tsPath.end());
 	StringVector svResult;
 	WIN32_FIND_DATA FindFileData;
-	HANDLE hFile = FindFirstFile(tsPath.c_str(), &FindFileData);
+	HANDLE hFile = FindFirstFile(tsFindPath.c_str(), &FindFileData);
 	if (hFile != INVALID_HANDLE_VALUE)
 	{
 		do
 		{
 			svResult.push_back(FindFileData.cFileName);
+			(--(svResult.end()))->insert(0, tsPath.c_str());//BAD: rewrite this section
 		}
 		while ( FindNextFile(hFile, &FindFileData) );
 		FindClose(hFile);
@@ -42,8 +45,8 @@ bool Components::Load(Component* pParent)
 {
 	dll_detail ddTemp;
 
-	StringVector svNames = GetComponentNames(TEXT("..\\debug\\*.dll"));
-	
+	StringVector svNames = GetComponentNames(COMPONENTS_PATH);
+
 	if (svNames.empty())
 		return false;
 

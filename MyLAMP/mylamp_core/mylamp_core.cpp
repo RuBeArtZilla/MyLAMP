@@ -41,13 +41,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	// TEST CODE
 	
-	Component* pcTest = new FileTags();
-	FileTags* pFT = (FileTags*)pcTest;
-	
-	pFT->GetFileTags(L"D:\\Audio\\Lossless\\Angel Beats!\\Angel Beats! – Insert Song Single 1 – Crow Song\\03 My Song.flac");
-
-	
-	delete pcTest;
+	//Component* pcTest = new FileTags();
+	//FileTags* pFT = (FileTags*)pcTest;
+	//pFT->GetFileTags(L"D:\\Audio\\Lossless\\Angel Beats!\\Angel Beats! – Insert Song Single 1 – Crow Song\\03 My Song.flac");
+	//delete pcTest;
 	
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);

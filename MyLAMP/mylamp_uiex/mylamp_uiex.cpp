@@ -3,10 +3,15 @@
 
 #include "stdafx.h"
 
-
 #define UIEX_ITEM_NAME L"UI Extended"
 #define UIEX_PARENT_ITEM_NAME L"Display"
-#include "../mylamp_core/mylamp_lib.cpp"
+
+#define SS_UIEX_ITEM_NAME L"UI Extended"
+#define SSPN_EXTEND_BORDER L"extend_frame_into_client_area"
+
+
+//#include "../mylamp_core/mylamp_lib.cpp"
+#include "../mylamp_core/mlp_settings_connector.cpp"
 
 mylamp::Component * pComponent = NULL;
 bool bInitUI = false;
@@ -18,6 +23,7 @@ class UIEX: public mylamp::Component
 private:
 	bool b_init;
 	bool b_load;
+	bool b_extend_frame;
 	mylamp::Component* p_parent;
 
 public:
@@ -65,6 +71,11 @@ UIEX::UIEX()
 
 bool UIEX::Load(Component* pParent)
 {
+	//stat_ss::saveSetting(tstring(SS_UIEX_ITEM_NAME), tstring(SSPN_EXTEND_BORDER), tstring(L"true"));
+	SaveSetting(tstring(SS_UIEX_ITEM_NAME), tstring(SSPN_EXTEND_BORDER), tstring(L"true"));
+
+	b_extend_frame = false;
+
 	p_parent = pParent; 
 	pParent->AddWndProc(MainWndProc); 
 	return (b_load = true);

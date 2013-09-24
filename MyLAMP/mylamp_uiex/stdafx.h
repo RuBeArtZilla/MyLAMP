@@ -15,7 +15,15 @@
 
 // TODO: reference additional headers your program requires here
 #define MYLAMP_HEADER_EXPORT 1
+
+//#include "../mylamp_core/mlp_headers.h"
+//#include "../mylamp_core/stdafx.h"
+
 #include "../mylamp_core/mylamp_header.h"
+#include "../mylamp_core/mylamp_lib.h"
+#include "../mylamp_core/mlp_settings_connector.h"
+
+
 
 #pragma comment(lib, "dwmapi.lib") 
 #include <dwmapi.h>

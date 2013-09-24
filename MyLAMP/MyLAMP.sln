@@ -4,33 +4,84 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_core", "mylamp_core\mylamp_core.vcxproj", "{2834C212-061D-4D22-A286-C73281FF9D7F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_updater", "mylamp_updater\mylamp_updater.vcxproj", "{EC27971D-4956-4A23-9398-1E75225CB464}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2834C212-061D-4D22-A286-C73281FF9D7F} = {2834C212-061D-4D22-A286-C73281FF9D7F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_cui", "mylamp_cui\mylamp_cui.vcxproj", "{D97AB01B-915D-47D5-8687-F1C65EB78966}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2834C212-061D-4D22-A286-C73281FF9D7F} = {2834C212-061D-4D22-A286-C73281FF9D7F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylamp_uiex", "mylamp_uiex\mylamp_uiex.vcxproj", "{D36DB06E-B162-4292-8B72-C22212C92851}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2834C212-061D-4D22-A286-C73281FF9D7F} = {2834C212-061D-4D22-A286-C73281FF9D7F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		azdebug_dll|Win32 = azdebug_dll|Win32
+		azdebug_dll|x64 = azdebug_dll|x64
+		azdebug|Win32 = azdebug|Win32
+		azdebug|x64 = azdebug|x64
 		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug_dll|Win32.ActiveCfg = azdebug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug_dll|Win32.Build.0 = azdebug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug_dll|x64.ActiveCfg = azdebug_dll|x64
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug_dll|x64.Build.0 = azdebug_dll|x64
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug|Win32.ActiveCfg = azdebug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug|Win32.Build.0 = azdebug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug|x64.ActiveCfg = azdebug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.azdebug|x64.Build.0 = azdebug|Win32
 		{2834C212-061D-4D22-A286-C73281FF9D7F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{2834C212-061D-4D22-A286-C73281FF9D7F}.Debug|Win32.Build.0 = Debug|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Debug|x64.ActiveCfg = Debug|x64
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Debug|x64.Build.0 = Debug|x64
 		{2834C212-061D-4D22-A286-C73281FF9D7F}.Release|Win32.ActiveCfg = Release|Win32
 		{2834C212-061D-4D22-A286-C73281FF9D7F}.Release|Win32.Build.0 = Release|Win32
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Release|x64.ActiveCfg = Release|x64
+		{2834C212-061D-4D22-A286-C73281FF9D7F}.Release|x64.Build.0 = Release|x64
+		{EC27971D-4956-4A23-9398-1E75225CB464}.azdebug_dll|Win32.ActiveCfg = azdebug_dll|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.azdebug_dll|Win32.Build.0 = azdebug_dll|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.azdebug_dll|x64.ActiveCfg = azdebug_dll|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.azdebug|Win32.ActiveCfg = azdebug|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.azdebug|Win32.Build.0 = azdebug|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.azdebug|x64.ActiveCfg = azdebug|Win32
 		{EC27971D-4956-4A23-9398-1E75225CB464}.Debug|Win32.ActiveCfg = Debug|Win32
 		{EC27971D-4956-4A23-9398-1E75225CB464}.Debug|Win32.Build.0 = Debug|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.Debug|x64.ActiveCfg = Debug|Win32
 		{EC27971D-4956-4A23-9398-1E75225CB464}.Release|Win32.ActiveCfg = Release|Win32
 		{EC27971D-4956-4A23-9398-1E75225CB464}.Release|Win32.Build.0 = Release|Win32
+		{EC27971D-4956-4A23-9398-1E75225CB464}.Release|x64.ActiveCfg = Release|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.azdebug_dll|Win32.ActiveCfg = azdebug_dll|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.azdebug_dll|Win32.Build.0 = azdebug_dll|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.azdebug_dll|x64.ActiveCfg = azdebug_dll|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.azdebug|Win32.ActiveCfg = azdebug|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.azdebug|Win32.Build.0 = azdebug|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.azdebug|x64.ActiveCfg = azdebug|Win32
 		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Debug|Win32.Build.0 = Debug|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Debug|x64.ActiveCfg = Debug|Win32
 		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Release|Win32.ActiveCfg = Release|Win32
 		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Release|Win32.Build.0 = Release|Win32
+		{D97AB01B-915D-47D5-8687-F1C65EB78966}.Release|x64.ActiveCfg = Release|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.azdebug_dll|Win32.ActiveCfg = azdebug_dll|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.azdebug_dll|Win32.Build.0 = azdebug_dll|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.azdebug_dll|x64.ActiveCfg = azdebug_dll|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.azdebug|Win32.ActiveCfg = azdebug|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.azdebug|Win32.Build.0 = azdebug|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.azdebug|x64.ActiveCfg = azdebug|Win32
 		{D36DB06E-B162-4292-8B72-C22212C92851}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D36DB06E-B162-4292-8B72-C22212C92851}.Debug|Win32.Build.0 = Debug|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.Debug|x64.ActiveCfg = Debug|Win32
 		{D36DB06E-B162-4292-8B72-C22212C92851}.Release|Win32.ActiveCfg = Release|Win32
 		{D36DB06E-B162-4292-8B72-C22212C92851}.Release|Win32.Build.0 = Release|Win32
+		{D36DB06E-B162-4292-8B72-C22212C92851}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
